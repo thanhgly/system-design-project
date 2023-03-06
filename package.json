@@ -4,7 +4,7 @@
   "description": "API service for reviews",
   "main": "index.js",
   "scripts": {
-    "test": "jest --watch --coverage",
+    "test": "jest --watch --coverage --detectOpenHandles",
     "start": "npx nodemon app.js"
   },
   "repository": {

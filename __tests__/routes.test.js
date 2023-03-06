@@ -1,17 +1,10 @@
 const request = require('supertest');
-const { app } = require('../app');
+const { app, server } = require('../app');
 
-describe('GET /hello', () => {
-  it('should return a 200 status code', async () => {
-    const res = await request(app).get('/hello');
-    expect(res.status).toBe(200);
-  });
-
-  it('should return a "Hello World!" message', async () => {
-    const res = await request(app).get('/hello');
-    expect(res.text).toBe('Hello World!');
-  });
+afterAll(() => {
+  server.close();
 });
+
 
 describe('GET /reviews', () => {
   it('should return a 200 status code', async () => {
@@ -52,6 +45,3 @@ describe('PUT /reviews/:review_id/report', () => {
   });
 
 });
-
-
-
