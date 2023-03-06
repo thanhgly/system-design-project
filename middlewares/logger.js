@@ -5,10 +5,14 @@ module.exports = (req, res, next) => {
     const {method, url} = req;
     const timestamp = new Date();
 
-    console.log('');
-    console.log('\x1b[37m%s\x1b[0m', timestamp.toLocaleString());
-    console.log('\x1b[36m%s\x1b[0m', `Serving ${method} ${url}`);
-    console.log('\x1b[33m%s\x1b[0m', `Processing time: ${timestamp - requestStart}ms`);
+    console.log(
+      `\x1b[37mAt ${timestamp.toLocaleString()}\x1b[0m`
+      + ' | ' +
+      `\x1b[36mServing ${method} ${url}\x1b[0m`
+      + ' | ' +
+      `\x1b[33mProcessing time: ${timestamp - requestStart}ms\x1b[0m`
+    );
+
   });
 
   next();
