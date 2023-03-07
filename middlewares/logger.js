@@ -1,8 +1,8 @@
 module.exports = (req, res, next) => {
   const requestStart = Date.now();
+  const {method, url} = req;
 
   res.on('finish', () => {
-    const {method, url} = req;
     const timestamp = new Date();
 
     console.log(
