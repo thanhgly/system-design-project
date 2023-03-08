@@ -17,6 +17,6 @@ client.connect((err) => {
   } else {
     console.log('Connected to PostgreSQL');
   }
-})
+});
 
 module.exports = client;
