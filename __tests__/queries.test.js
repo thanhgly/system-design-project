@@ -1,6 +1,11 @@
 const db = require('../db/queries');
 
+afterAll(() => {
+  db.end();
+});
+
 describe('getReviews', () => {
+
   it('should return an array of reviews for a given product', (done) => {
     const product_id = 1;
     db.getReviews(product_id)
