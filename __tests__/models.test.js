@@ -1,4 +1,9 @@
 const reviews = require('../models/reviews');
+const db = require('../db/index');
+
+afterAll(() => {
+  db.end();
+});
 
 describe('getReviews', () => {
   it('should return the expected shape for reviews', (done) => {

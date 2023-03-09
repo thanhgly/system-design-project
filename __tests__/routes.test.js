@@ -1,7 +1,9 @@
 const request = require('supertest');
 const { app, server } = require('../app');
+const db = require('../db/index');
 
 afterAll(() => {
+  db.end();
   server.close();
 });
 
