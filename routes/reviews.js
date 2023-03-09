@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
+const { reviews } = require('../controllers');
 
-router.get('/', (req, res) => {
-  res.sendStatus(200);
-});
+router.get('/', reviews.get);
 
 router.get('/meta', (req, res) => {
   res.sendStatus(200);

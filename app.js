@@ -1,8 +1,7 @@
 const express = require('express');
 const config = require('./config');
 const logger = require('./middlewares/logger');
-const hello = require('./routes/hello');
-const reviews = require('./routes/reviews');
+const { reviews, hello }= require('./routes');
 
 const app = express();
 

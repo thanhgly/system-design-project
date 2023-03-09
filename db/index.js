@@ -6,7 +6,8 @@ const dbConfig = {
   host: config.db.host,
   database: config.db.database,
   password: config.db.password,
-  port: config.db.port
+  port: config.db.port,
+  keepAlive: false
 };
 
 const client = new Client(dbConfig);
@@ -17,6 +18,6 @@ client.connect((err) => {
   } else {
     console.log('Connected to PostgreSQL');
   }
-})
+});
 
 module.exports = client;
