@@ -1,4 +1,6 @@
-const reviews = require('../models/reviews');
+/* eslint-disable no-undef */
+const { reviews } = require('../models');
+const { metadata }= require('../models');
 const db = require('../db/index');
 
 afterAll(() => {
@@ -26,6 +28,47 @@ describe('getReviews', () => {
       expect(res.results[0]).toHaveProperty('photos');
       expect(Array.isArray(res.results[0].photos)).toBe(true);
       done();
+    })
+    .catch(err => {
+      console.error(err.stack);
+    })
+  });
+});
+
+describe('metadata', () => {
+  it('should return the expected shape of metadata', (done) => {
+    metadata.get(100)
+    .then(response => {
+      expect(typeof response).toBe('object');
+      expect(response).toHaveProperty('product_id');
+      expect(response).toHaveProperty('ratings');
+      expect(response).toHaveProperty('recommended');
+      expect(response).toHaveProperty('characteristics');
+      expect(typeof response.ratings).toBe('object');
+      expect(typeof response.recommended).toBe('object');
+      expect(typeof response.characteristics).toBe('object');
+      done();
+    })
+    .catch(err => {
+      console.error(err.stack);
+    });
+  });
+
+  it('should return the same shape even if the product_id doesnot exist', (done) => {
+    metadata.get(99999999)
+    .then(response => {
+      expect(typeof response).toBe('object');
+      expect(response).toHaveProperty('product_id');
+      expect(response).toHaveProperty('ratings');
+      expect(response).toHaveProperty('recommended');
+      expect(response).toHaveProperty('characteristics');
+      expect(typeof response.ratings).toBe('object');
+      expect(typeof response.recommended).toBe('object');
+      expect(typeof response.characteristics).toBe('object');
+      done();
+    })
+    .catch(err => {
+      console.error(err.stack);
     });
   });
 });

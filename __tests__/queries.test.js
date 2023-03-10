@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const db = require('../db/queries');
 
 afterAll(() => {
@@ -50,6 +51,21 @@ describe('getReviewPhotos', () => {
     .then(res => {
       let result = res.rows;
       expect(Array.isArray(result)).toBe(true);
+      expect(result[0]).toHaveProperty('url');
+      expect(result[0]).toHaveProperty('id');
+      done();
+    })
+    .catch(err => {
+      console.error(err.stack);
+    });
+  });
+
+  it('should return an empty array for non-existent review', (done) => {
+    const review_id = 9999999;
+    db.getReviewPhotos(review_id)
+    .then(res => {
+      let result = res.rows;
+      expect(result).toEqual([]);
       done();
     })
     .catch(err => {
