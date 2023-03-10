@@ -1,12 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { reviews } = require('../controllers');
+const { reviews, metadata } = require('../controllers');
 
 router.get('/', reviews.get);
 
-router.get('/meta', (req, res) => {
-  res.sendStatus(200);
-});
+router.get('/meta', metadata.get);
 
 router.post('/', (req, res) => {
   res.sendStatus(201);
