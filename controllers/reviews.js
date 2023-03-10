@@ -11,7 +11,7 @@ module.exports = {
 
     reviews.getReviews(product_id, sort, page, count)
     .then(reviews => {
-      res.json(reviews).end();
+      res.json(reviews);
     })
     .catch(err => {
       console.error(err.stack);
