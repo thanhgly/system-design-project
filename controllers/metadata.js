@@ -1,22 +1,19 @@
-const { reviews } = require('../models');
+const { metadata } = require('../models');
 
 module.exports = {
   get: (req, res) => {
-    let {product_id, sort, page, count} = req.query;
+    let { product_id } = req.query;
 
     if (isNaN(product_id)) {
       res.status(422).send('Error: invalid product_id provided');
       return;
     }
 
-    reviews.getReviews(product_id, sort, page, count)
-    .then(reviews => {
-      res.json(reviews);
-    })
+    metadata.get(product_id)
+    .then(response => res.json(response))
     .catch(err => {
       console.error(err.stack);
       res.sendStatus(501);
     });
   },
-
 };
