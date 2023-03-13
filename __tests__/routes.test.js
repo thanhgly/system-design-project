@@ -8,7 +8,6 @@ afterAll(() => {
   server.close();
 });
 
-
 describe('GET /reviews', () => {
   it('should return a 200 status code when receive a valid request params', async () => {
     const res = await request(app).get('/reviews/?product_id=1');
@@ -35,15 +34,52 @@ describe('GET /reviews', () => {
     const res = await request(app).get('/reviews');
     expect(res.status).toBe(422);
     expect(res.text).toBe('Error: invalid product_id provided');
-  })
+  });
 });
 
 describe('GET /reviews/meta', () => {
   it('should return a 200 status code', async () => {
-    const res = await request(app).get('/reviews/meta');
+
+    let expectedResponse = {
+      "ratings": {
+          "4": 1,
+          "5": 1
+      },
+      "product_id": 1,
+      "recommended": {
+          "true": 1,
+          "false": 1
+      },
+      "characteristics": {
+          "Fit": {
+              "id": 1,
+              "value": 4
+          },
+          "Length": {
+              "id": 2,
+              "value": 4
+          },
+          "Comfort": {
+              "id": 3,
+              "value": 5
+          },
+          "Quality": {
+              "id": 4,
+              "value": 4
+          }
+      }
+  }
+
+    const res = await request(app).get('/reviews/meta/?product_id=1');
     expect(res.status).toBe(200);
+    expect(res.body).toEqual(expectedResponse);
   });
 
+  it('should return a 422 status code when receive a invalid or non-existent request params', async () => {
+    const res = await request(app).get('/reviews/meta');
+    expect(res.status).toBe(422);
+    expect(res.text).toBe('Error: invalid product_id provided');
+  });
 });
 
 describe('POST /reviews', () => {
