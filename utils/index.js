@@ -9,19 +9,4 @@ const getSortQuery = (sortString) => {
   }
 };
 
-const conformReview = (review, photos) => {
-  return {
-    review_id: review.id,
-    rating: review.rating,
-    summary: review.summary,
-    recommend: review.recommend,
-    response: review.response,
-    body: review.body,
-    date: new Date(Number(review.date)).toISOString(),
-    reviewer_name: review.reviewer_name,
-    helpfulness: review.helpfulness,
-    photos: photos
-  };
-};
-
-module.exports = { getSortQuery, conformReview };
+module.exports = { getSortQuery };

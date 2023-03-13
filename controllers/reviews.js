@@ -9,7 +9,7 @@ module.exports = {
       return;
     }
 
-    reviews.getReviews(product_id, sort, page, count)
+    reviews.get(product_id, sort, page, count)
     .then(reviews => {
       res.json(reviews);
     })
