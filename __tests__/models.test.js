@@ -5,9 +5,9 @@ afterAll(() => {
   db.end();
 });
 
-describe('getReviews', () => {
+describe('get', () => {
   it('should return the expected shape for reviews', (done) => {
-    reviews.getReviews(100)
+    reviews.get(100)
     .then(res => {
       expect(res).toHaveProperty('product');
       expect(res).toHaveProperty('page');
@@ -27,5 +27,25 @@ describe('getReviews', () => {
       expect(Array.isArray(res.results[0].photos)).toBe(true);
       done();
     });
+  });
+
+  it('should return the expected shape with an empty array result when given a nonx-existent product', (done) => {
+    reviews.get(99999999)
+    .then(res => {
+      expect(res).toHaveProperty('product');
+      expect(res).toHaveProperty('page');
+      expect(res).toHaveProperty('count');
+      expect(res).toHaveProperty('results');
+      expect(res.results).toEqual([]);
+      done();
+    });
+  });
+
+  it('should throw an error if query fails', (done) => {
+    reviews.get('aaa')
+    .catch(err => {
+      expect(err.message).toBe('column "aaa" does not exist');
+      done();
+    })
   });
 });
