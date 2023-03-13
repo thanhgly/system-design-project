@@ -1,31 +1,43 @@
-const db = require('../db/queries');
-const { conformReview } = require('../utils');
+const db = require('../db');
+const { getSortQuery } = require('../utils');
 
 module.exports = {
-  getReviews: (product_id, sort, page, count) => {
-    return db.getReviews(product_id, sort, page, count)
-    .then(res => {
-      return res.rows;
-    })
-    .then(reviews => {
-      return Promise.all(reviews.map(review => {
-        let review_id = review.id;
-        return db.getReviewPhotos(review_id)
-        .then(res => {
-          return conformReview(review, res.rows);
+  get: (product_id, sort = 'newest', page = 1, count = 5) => {
+    let queryString = `
+      SELECT
+        r.id AS review_id,
+        r.rating,
+        r.summary,
+        r.recommend,
+        r.response,
+        r.body,
+        to_char(to_timestamp(r.date / 1000) AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS:MS"Z"') AS date,
+        r.reviewer_name,
+        r.helpfulness,
+        jsonb_agg(jsonb_build_object('id', rp.id, 'url', rp.url)) AS photos
+      FROM reviews r
+      LEFT JOIN reviews_photos rp ON r.id = rp.review_id
+      WHERE r.product_id = ${product_id} AND r.reported = FALSE
+      GROUP BY r.id
+      ${getSortQuery(sort)}
+      LIMIT ${count}
+      OFFSET ${(page - 1) * count}
+    `
+
+    return new Promise((resolve, reject) => {
+
+      db.query(queryString)
+      .then(res => {
+        resolve({
+          product: product_id,
+          page,
+          count,
+          results: res.rows
         });
-      }));
-    })
-    .then(reviews => {
-      return {
-        product: product_id,
-        page: page || 1,
-        count: count || 5,
-        results: reviews
-      };
-    })
-    .catch(err => {
-      console.error(err.stack);
+      })
+      .catch(err => {
+        reject(err);
+      });
     });
   },
 
