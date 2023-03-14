@@ -1,5 +1,5 @@
 const db = require('../db');
-const { getSortQuery } = require('../utils');
+const utils = require('../utils');
 
 module.exports = {
   get: (product_id, sort = 'newest', page = 1, count = 5) => {
@@ -19,7 +19,7 @@ module.exports = {
       LEFT JOIN reviews_photos rp ON r.id = rp.review_id
       WHERE r.product_id = ${product_id} AND r.reported = FALSE
       GROUP BY r.id
-      ${getSortQuery(sort)}
+      ${utils.getSortQuery(sort)}
       LIMIT ${count}
       OFFSET ${(page - 1) * count}
     `
@@ -41,5 +41,11 @@ module.exports = {
     });
   },
 
+  add: (data) => {
+    let {product_id, rating, summary, body, recommend, name, email, photos, characteristics} = data;
+
+
+
+  },
 };
 
