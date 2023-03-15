@@ -1,6 +1,9 @@
 const express = require('express');
+const bodyVerifier = require('../middlewares/bodyVerifier');
 const router = express.Router();
 const { reviews, metadata } = require('../controllers');
+
+router.use(bodyVerifier);
 
 router.get('/', reviews.get);
 

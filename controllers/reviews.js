@@ -22,19 +22,9 @@ module.exports = {
   post: (req, res) => {
     let data = req.body;
 
-    for (let key in data) {
-      if (key === 'recommend' && typeof data[key] === 'boolean') {
-        continue;
-      }
-      if (!!data[key] === false) {
-        res.status(422).send('Error: Review body contains invalid entries');
-        return;
-      }
-    }
-
     reviews.add(data)
     .then(() => {
-      res.send('Created');
+      res.status(201).send('Created');
     })
     .catch(err => {
       console.error(err.stack);

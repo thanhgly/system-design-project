@@ -75,7 +75,7 @@ describe('GET /reviews/meta', () => {
     expect(res.body).toEqual(expectedResponse);
   });
 
-  it('should return a 422 status code when receive a invalid or non-existent request params', async () => {
+  it('should return a 422 status code when receive an invalid or non-existent request params', async () => {
     const res = await request(app).get('/reviews/meta');
     expect(res.status).toBe(422);
     expect(res.text).toBe('Error: invalid product_id provided');
@@ -83,11 +83,41 @@ describe('GET /reviews/meta', () => {
 });
 
 describe('POST /reviews', () => {
-  it('should return a 201 status code', async () => {
-    const res = await request(app).post('/reviews');
-    expect(res.status).toBe(201);
+
+  // DELETE test samples FROM database
+  afterAll(() => {
+    return Promise.all([
+      db.query(`DELETE FROM reviews_photos WHERE url = 'test url'`),
+      db.query(`DELETE FROM characteristic_reviews WHERE value = 999`),
+      db.query(`DELETE FROM reviews WHERE id = (SELECT MAX(id) FROM reviews)`)
+    ]);
   });
 
+  it('should return a 201 status code', async () => {
+    const data = {
+      product_id: 1,
+      rating: 1,
+      summary: 'bad product',
+      body: 'the product is bad',
+      recommend: false,
+      name: 'reviewer',
+      email: 'reviewer@review.com',
+      photos: ['test url', 'test url'],
+      characteristics: {
+        "14": 999,
+        "15": 999
+      }
+    };
+    const res = await request(app).post('/reviews').send(data);
+    expect(res.status).toBe(201);
+    expect(res.text).toBe('Created');
+  });
+
+  it('should return a 422 status code when receive an invalid data', async () => {
+    const res = await request(app).post('/reviews');
+    expect(res.status).toBe(422);
+    expect(res.text).toBe('Error: Review body contains invalid entries');
+  });
 });
 
 describe('PUT /reviews/:review_id/helpful', () => {

@@ -63,7 +63,6 @@ module.exports = {
       )
       SELECT * FROM inserted_id
     `;
-    console.log(queryString);
     let values = [product_id, rating, summary, body, recommend, name, email];
 
     return new Promise((resolve, reject) => {
