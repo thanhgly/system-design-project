@@ -15,8 +15,20 @@ module.exports = {
     })
     .catch(err => {
       console.error(err.stack);
-      res.sendStatus(501);
+      res.status(500).send('An error occurred. If this error persists, contact your instruction team.');
     });
   },
 
+  post: (req, res) => {
+    let data = req.body;
+
+    reviews.add(data)
+    .then(() => {
+      res.status(201).send('Created');
+    })
+    .catch(err => {
+      console.error(err.stack);
+      res.status(500).send('An error occurred. If this error persists, contact your instruction team.');
+    });
+  }
 };

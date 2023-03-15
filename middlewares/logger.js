@@ -12,7 +12,6 @@ module.exports = (req, res, next) => {
       + ' | ' +
       `\x1b[33mProcessing time: ${timestamp - requestStart}ms\x1b[0m`
     );
-
   });
 
   next();

@@ -5,6 +5,8 @@ const { reviews, hello }= require('./routes');
 
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({extended: true}))
 app.use(logger);
 
 app.use('/hello', hello);
