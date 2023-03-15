@@ -50,9 +50,9 @@ module.exports = {
         RETURNING id
       )
       INSERT INTO reviews_photos (review_id, url)
-      VALUES ${utils.generateQueryStrings('photos', photos)}
+      VALUES ${utils.generateQueryString('photos', photos)}
       , characteristic_reviews (characteristic_id, review_id, value)
-      VALUES ${utils.generateQueryStrings('characteristics', characteristics)}
+      VALUES ${utils.generateQueryString('characteristics', characteristics)}
     `;
     let values = [product_id, rating, summary, body, recommend, name, email];
 
