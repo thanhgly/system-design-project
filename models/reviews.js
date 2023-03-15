@@ -43,9 +43,29 @@ module.exports = {
 
   add: (data) => {
     let {product_id, rating, summary, body, recommend, name, email, photos, characteristics} = data;
+    let queryString = `
+      WITH inserted_id AS (
+        INSERT INTO reviews (product_id, rating, summary, body, recommend, reviewer_name, reviewer_email)
+        VALUES ($1, $2, $3, $4, $5, $6, $7)
+        RETURNING id
+      )
+      INSERT INTO reviews_photos (review_id, url)
+      VALUES ${utils.generateQueryStrings('photos', photos)}
+      , characteristic_reviews (characteristic_id, review_id, value)
+      VALUES ${utils.generateQueryStrings('characteristics', characteristics)}
+    `;
+    let values = [product_id, rating, summary, body, recommend, name, email];
 
+    return new Promise((resolve, reject) => {
 
-
+      db.query(queryString, values)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+    });
   },
 };
 

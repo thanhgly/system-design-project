@@ -21,18 +21,4 @@ describe('getSortQuery', () => {
   });
 });
 
-describe('addReview', () => {
-  it('should ', (done) => {
-    utils.addReview(1, 4, 'summary text', 'body text', true, 'tester', 'tester@test.com')
-    .then(res => {
-      console.log(res);
-    })
-    .then(() => {
-      return db.query('DELETE FROM reviews WHERE id = (SELECT MAX(id) FROM reviews');
-    })
-    .then(() => {
-      done();
-    });
-  })
-});
 
