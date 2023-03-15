@@ -21,7 +21,7 @@ describe('generateQueryString', () => {
   it('should return a correct string when given an array of url', () => {
     let id = '(SELECT id FROM inserted_id)';
     let photos = ['url1', 'url2', 'url3'];
-    let expectedStr = `(${id}, url1),(${id}, url2),(${id}, url3)`;
+    let expectedStr = `(${id}, 'url1'),(${id}, 'url2'),(${id}, 'url3')`;
 
     expect(utils.generateQueryString('photos', photos)).toBe(expectedStr);
   });

@@ -34,6 +34,69 @@ describe('reviews\' get', () => {
   });
 });
 
+describe('reviews\' add', () => {
+  it('should add a new row to reviews table, new row in photos', (done) => {
+    let review = {
+      product_id: 1,
+      rating: 1,
+      summary: 'bad product',
+      body: 'the product is bad',
+      recommend: false,
+      name: 'reviewer',
+      email: 'reviewer@review.com',
+      photos: ['test url', 'test url'],
+      characteristics: {
+        "14": 999,
+        "15": 999
+      }
+    }
+    reviews.add(review)
+    .then(() => {
+      return db.query('SELECT * FROM reviews ORDER BY id DESC LIMIT 1');
+    })
+    .then(r => {
+      let res = r.rows[0];
+      expect(res.product_id).toBe(1);
+      expect(res.rating).toBe(1);
+      expect(res.summary).toBe('bad product');
+      expect(res.body).toBe('the product is bad');
+      expect(res.recommend).toBe(false);
+      expect(res.reviewer_name).toBe('reviewer');
+      expect(res.reviewer_email).toBe('reviewer@review.com');
+      expect(isNaN(res.date)).toBe(false);
+      expect(res.helpfulness).toBe(0);
+      expect(res.reported).toBe(false);
+      expect(res.response).toBeNull();
+      return db.query(`SELECT * FROM reviews_photos WHERE review_id = ${res.id}`);
+    })
+    .then(r => {
+      let res = r.rows;
+      expect(res[0].url).toBe('test url');
+      expect(res[1].url).toBe('test url');
+      return db.query(`SELECT * FROM characteristic_reviews WHERE review_id = ${res[0].review_id}`);
+    })
+    .then(r => {
+      let res = r.rows;
+      expect(res[0].characteristic_id).toBe(14);
+      expect(res[0].value).toBe(999);
+      expect(res[1].characteristic_id).toBe(15);
+      expect(res[1].value).toBe(999);
+
+      return Promise.all([
+        db.query(`DELETE FROM reviews_photos WHERE url = 'test url'`),
+        db.query(`DELETE FROM characteristic_reviews WHERE value = 999`),
+        db.query(`DELETE FROM reviews WHERE id = (SELECT MAX(id) FROM reviews)`)
+      ]);
+    })
+    .then(() => {
+      done();
+    })
+    .catch(err => {
+      console.error(err.stack);
+    });
+  });
+});
+
 describe('metadata\' get', () => {
   it('should return the expected shape of metadata', (done) => {
     metadata.get(100)

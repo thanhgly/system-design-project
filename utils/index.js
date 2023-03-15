@@ -12,7 +12,7 @@ const getSortQuery = (sortString) => {
 const generateQueryString = (type, data) => {
   switch (type) {
     case 'photos':
-      return data.map((url) => `((SELECT id FROM inserted_id), ${url})`).join(',');
+      return data.map((url) => `((SELECT id FROM inserted_id), '${url}')`).join(',');
     case 'characteristics':
       return objToQueryStr(data);
   }

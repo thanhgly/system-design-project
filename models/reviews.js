@@ -43,17 +43,27 @@ module.exports = {
 
   add: (data) => {
     let {product_id, rating, summary, body, recommend, name, email, photos, characteristics} = data;
+    let hasPhotos = photos.length !== 0;
+    let photosQuery = `
+      inserted_review_photo AS (
+        INSERT INTO reviews_photos (review_id, url)
+        VALUES ${utils.generateQueryString('photos', photos)}
+      ),
+    `;
     let queryString = `
       WITH inserted_id AS (
         INSERT INTO reviews (product_id, rating, summary, body, recommend, reviewer_name, reviewer_email)
         VALUES ($1, $2, $3, $4, $5, $6, $7)
         RETURNING id
+      ),
+      ${hasPhotos ? photosQuery : ''}
+      inserted_characteristic_reviews AS (
+        INSERT INTO characteristic_reviews (characteristic_id, review_id, value)
+        VALUES ${utils.generateQueryString('characteristics', characteristics)}
       )
-      INSERT INTO reviews_photos (review_id, url)
-      VALUES ${utils.generateQueryString('photos', photos)}
-      , characteristic_reviews (characteristic_id, review_id, value)
-      VALUES ${utils.generateQueryString('characteristics', characteristics)}
+      SELECT * FROM inserted_id
     `;
+    console.log(queryString);
     let values = [product_id, rating, summary, body, recommend, name, email];
 
     return new Promise((resolve, reject) => {
