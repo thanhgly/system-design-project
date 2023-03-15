@@ -1,6 +1,7 @@
 module.exports = (req, res, next) => {
   const requestStart = Date.now();
   const {method, url} = req;
+  const body = req.body;
 
   res.on('finish', () => {
     const timestamp = new Date();
@@ -12,6 +13,10 @@ module.exports = (req, res, next) => {
       + ' | ' +
       `\x1b[33mProcessing time: ${timestamp - requestStart}ms\x1b[0m`
     );
+
+    if (Object.keys(body).length) {
+      console.log('Request body = ', body);
+    }
 
   });
 
