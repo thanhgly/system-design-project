@@ -21,6 +21,5 @@ module.exports = (req, res, next) => {
     }
   }
 
-  console.log('Request body = ', data);
   next();
 };
