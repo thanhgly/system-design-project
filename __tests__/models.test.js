@@ -97,6 +97,32 @@ describe('reviews\' add', () => {
   });
 });
 
+describe('reviews\' markHelpful', () => {
+  it('should increment the helpfulness value of a review by 1 given a review id', async () => {
+    let review_id = 1;
+    let queryString = `SELECT helpfulness FROM reviews WHERE id = ${review_id}`;
+    let preUpdated = await db.query(queryString)
+    .then(res => {
+      return res.rows[0].helpfulness;
+    });
+
+    await reviews.markHelpful(review_id)
+    .then(() => {
+      return db.query(queryString);
+    })
+    .then(res => {
+      let postUpdated = res.rows[0].helpfulness;
+      expect(postUpdated).toEqual(preUpdated + 1);
+    })
+    .then(() => {
+      return db.query(`UPDATE reviews SET helpfulness = helpfulness - 1 WHERE id = ${review_id}`);
+    })
+    .catch(err => {
+      console.log(err.stack);
+    });
+  });
+});
+
 describe('metadata\' get', () => {
   it('should return the expected shape of metadata', (done) => {
     metadata.get(100)

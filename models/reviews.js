@@ -76,5 +76,24 @@ module.exports = {
       });
     });
   },
+
+  markHelpful: (review_id) => {
+    let queryString = `
+      UPDATE reviews
+      SET helpfulness = helpfulness + 1
+      WHERE id = ${review_id}
+    `;
+
+    return new Promise((resolve, reject) => {
+
+      db.query(queryString)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+    });
+  },
 };
 
