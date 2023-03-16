@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 const request = require('supertest');
 const { app, server } = require('../app');
+const { metadata } = require('../models');
 const db = require('../db/index');
 
 afterAll(() => {
@@ -38,37 +39,9 @@ describe('GET /reviews', () => {
 });
 
 describe('GET /reviews/meta', () => {
-  it('should return a 200 status code', async () => {
+  it('should return a 200 status code and a correct data sh', async () => {
 
-    let expectedResponse = {
-      "ratings": {
-          "4": 1,
-          "5": 1
-      },
-      "product_id": 1,
-      "recommended": {
-          "true": 1,
-          "false": 1
-      },
-      "characteristics": {
-          "Fit": {
-              "id": 1,
-              "value": 4
-          },
-          "Length": {
-              "id": 2,
-              "value": 4
-          },
-          "Comfort": {
-              "id": 3,
-              "value": 5
-          },
-          "Quality": {
-              "id": 4,
-              "value": 4
-          }
-      }
-  }
+    let expectedResponse = await metadata.get(1);
 
     const res = await request(app).get('/reviews/meta/?product_id=1');
     expect(res.status).toBe(200);
@@ -93,7 +66,7 @@ describe('POST /reviews', () => {
     ]);
   });
 
-  it('should return a 201 status code', async () => {
+  it('should return a 201 status code and add new data to database', async () => {
     const data = {
       product_id: 1,
       rating: 1,
@@ -109,8 +82,14 @@ describe('POST /reviews', () => {
       }
     };
     const res = await request(app).post('/reviews').send(data);
+    const newReview = await db.query('SELECT * FROM reviews WHERE id = (SELECT MAX(id) FROM reviews)');
+    const newPhotos = await db.query('SELECT * FROM reviews_photos WHERE url = \'test url\'');
+    const newChars = await db.query('SELECT * FROM characteristic_reviews WHERE value = 999');
     expect(res.status).toBe(201);
     expect(res.text).toBe('Created');
+    expect(newReview.rows[0].summary).toBe('bad product');
+    expect(newPhotos.rows[0].url).toBe('test url');
+    expect(newChars.rows[0].value).toBe(999);
   });
 
   it('should return a 422 status code when receive an invalid data', async () => {
@@ -121,9 +100,23 @@ describe('POST /reviews', () => {
 });
 
 describe('PUT /reviews/:review_id/helpful', () => {
+
+  afterAll(() => {
+    return db.query('UPDATE reviews SET helpfulness = helpfulness - 1 WHERE id = 1');
+  });
+
   it('should return a 204 status code', async () => {
+    const prePut = await db.query(`SELECT helpfulness FROM reviews WHERE id = 1`);
     const res = await request(app).put('/reviews/1/helpful');
     expect(res.status).toBe(204);
+    const postPut = await db.query(`SELECT helpfulness FROM reviews WHERE id = 1`);
+    expect(prePut.rows[0].helpfulness).toBe(postPut.rows[0].helpfulness - 1);
+  });
+
+  it('should return a 422 status code when provided an invalid review id', async () => {
+    const res = await request(app).put('/reviews/notAnId/helpful');
+    expect(res.status).toBe(422);
+    expect(res.text).toBe('Error: invalid review id provided');
   });
 
 });
