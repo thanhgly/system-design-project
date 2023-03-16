@@ -115,7 +115,29 @@ describe('reviews\' markHelpful', () => {
       expect(postUpdated).toEqual(preUpdated + 1);
     })
     .then(() => {
-      return db.query(`UPDATE reviews SET helpfulness = helpfulness - 1 WHERE id = ${review_id}`);
+      return db.query(`UPDATE reviews SET helpfulness = ${preUpdated} WHERE id = ${review_id}`);
+    })
+    .catch(err => {
+      console.log(err.stack);
+    });
+  });
+});
+
+describe('reviews\' report', () => {
+  it('should update the report value of a review to true when given a review id', (done) => {
+    let review_id = 1;
+
+    reviews.report(review_id)
+    .then(() => {
+      return db.query(`SELECT reported FROM reviews WHERE id = ${review_id}`);
+    })
+    .then(res => {
+      let reported = res.rows[0].reported;
+      expect(reported).toBe(true);
+      return db.query(`UPDATE reviews SET reported = false WHERE id = ${review_id}`);
+    })
+    .then(() => {
+      done();
     })
     .catch(err => {
       console.log(err.stack);

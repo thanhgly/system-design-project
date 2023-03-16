@@ -95,5 +95,24 @@ module.exports = {
       });
     });
   },
+
+  report: (review_id) => {
+    let queryString = `
+      UPDATE reviews
+      SET reported = true
+      WHERE id = ${review_id}
+    `;
+
+    return new Promise((resolve, reject) => {
+
+      db.query(queryString)
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      });
+    });
+  }
 };
 
