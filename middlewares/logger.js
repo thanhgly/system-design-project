@@ -1,6 +1,7 @@
 module.exports = (req, res, next) => {
   const requestStart = Date.now();
   const {method, url} = req;
+  const isPost = req.method === 'POST';
 
   res.on('finish', () => {
     const timestamp = new Date();
@@ -11,6 +12,8 @@ module.exports = (req, res, next) => {
       `\x1b[36mServing ${method} ${url}\x1b[0m`
       + ' | ' +
       `\x1b[33mProcessing time: ${timestamp - requestStart}ms\x1b[0m`
+      + ' | ' +
+      (isPost ? `Request body = ` + JSON.stringify(req.body) : '')
     );
   });
 

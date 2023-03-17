@@ -46,7 +46,7 @@ module.exports = {
               product_id,
               ratings: {},
               recommended: {},
-              characteristics:{}
+              characteristics: {}
             }
           );
         }
