@@ -11,7 +11,7 @@ module.exports = {
         r.recommend,
         r.response,
         r.body,
-        to_char(to_timestamp(r.date / 1000) AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS:MS"Z"') AS date,
+        to_char(to_timestamp(r.date / 1000) AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"') AS date,
         r.reviewer_name,
         r.helpfulness,
         jsonb_agg(jsonb_build_object('id', rp.id, 'url', rp.url)) AS photos
