@@ -48,5 +48,23 @@ module.exports = {
       console.log(err.stack);
       res.status(500).send('An error occurred. If this error persists, contact your instruction team.');
     });
+  },
+
+  report: (req, res) => {
+    let review_id = req.params.review_id;
+    console.log(review_id);
+    if (isNaN(review_id)) {
+      res.status(422).send('Error: invalid review id provided');
+      return;
+    }
+
+    reviews.report(review_id)
+    .then(() => {
+      res.sendStatus(204);
+    })
+    .catch(err => {
+      console.log(err.stack);
+      res.status(500).send('An error occurred. If this error persisted, contact your instruction team.');
+    });
   }
 };

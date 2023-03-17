@@ -101,16 +101,20 @@ describe('POST /reviews', () => {
 
 describe('PUT /reviews/:review_id/helpful', () => {
 
-  afterAll(() => {
-    return db.query('UPDATE reviews SET helpfulness = helpfulness - 1 WHERE id = 1');
-  });
-
-  it('should return a 204 status code', async () => {
-    const prePut = await db.query(`SELECT helpfulness FROM reviews WHERE id = 1`);
-    const res = await request(app).put('/reviews/1/helpful');
+  it('should return a 204 status code and update the data in database', async () => {
+    const prePut = await db.query(`SELECT helpfulness FROM reviews WHERE id = 1`)
+    .then(res => {
+      return res.rows[0].helpfulness;
+    });
+    const res = await request(app).put('/reviews/1/helpful')
     expect(res.status).toBe(204);
-    const postPut = await db.query(`SELECT helpfulness FROM reviews WHERE id = 1`);
-    expect(prePut.rows[0].helpfulness).toBe(postPut.rows[0].helpfulness - 1);
+
+    await db.query(`SELECT helpfulness FROM reviews WHERE id = 1`)
+    .then(res => {
+      let postPut = res.rows[0].helpfulness;
+      expect(postPut).toBe(prePut + 1);
+    })
+    .finally(() => db.query(`UPDATE reviews SET helpfulness = ${prePut} WHERE id = 1`));
   });
 
   it('should return a 422 status code when provided an invalid review id', async () => {
@@ -122,9 +126,27 @@ describe('PUT /reviews/:review_id/helpful', () => {
 });
 
 describe('PUT /reviews/:review_id/report', () => {
-  it('should return a 204 status code', async () => {
+  it('should return a 204 status code and update the data ind database', async () => {
+    const prePut = await db.query(`SELECT reported FROM reviews WHERE id = 1`).
+    then(res => {
+      return res.rows[0].reported;
+    });
+
     const res = await request(app).put('/reviews/1/report');
     expect(res.status).toBe(204);
+
+    await db.query(`SELECT reported FROM reviews WHERE id = 1`)
+    .then(res => {
+      let postPut = res.rows[0].reported;
+      expect(postPut).toBe(true);
+    })
+    .finally(() => db.query(`UPDATE reviews SET reported = ${prePut} WHERE id = 1`));
+  });
+
+  it('should return a 422 status code when provided an invalid review id', async () => {
+    const res = await request(app).put('/reviews/notAnId/report');
+    expect(res.status).toBe(422);
+    expect(res.text).toBe('Error: invalid review id provided');
   });
 
 });
