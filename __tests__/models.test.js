@@ -84,9 +84,11 @@ describe('reviews\' add', () => {
 
       return Promise.all([
         db.query(`DELETE FROM reviews_photos WHERE url = 'test url'`),
-        db.query(`DELETE FROM characteristic_reviews WHERE value = 999`),
-        db.query(`DELETE FROM reviews WHERE id = (SELECT MAX(id) FROM reviews)`)
+        db.query(`DELETE FROM characteristic_reviews WHERE value = 999`)
       ]);
+    })
+    .then(() => {
+      return db.query(`DELETE FROM reviews WHERE id = (SELECT MAX(id) FROM reviews)`);
     })
     .then(() => {
       done();
