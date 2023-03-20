@@ -35,27 +35,27 @@ describe('random id generator', () => {
 });
 
 describe('reviews\' read queries', () => {
-  it('should respond in less than 50ms', (done) => {
-
+  it('should respond in less than 50ms',async () => {
     let start = performance.now();
-    reviews.get(generateRandomId('products'))
+    let end = await reviews.get(generateRandomId('products'))
     .then(() => {
-      let end = performance.now();
-      expect(Math.floor(end - start)).toBeLessThan(50);
-      done();
+      return performance.now();
     });
+    let time = end - start;
+    expect(time).toBeLessThan(50);
+    console.log('Query time: ', time);
   });
 });
 
 describe('metadata\'s read queries', () => {
-  it('should respond in less than 50ms', (done) => {
-
+  it('should respond in less than 50ms', async () => {
     let start = performance.now();
-    metadata.get(generateRandomId('reviews'))
+    let end = await metadata.get(generateRandomId('reviews'))
     .then(() => {
-      let end = performance.now();
-      expect(Math.floor(end - start)).toBeLessThan(50);
-      done();
+      return performance.now();
     });
+    let time = end - start;
+    expect(time).toBeLessThan(50);
+    console.log('Query time: ', time);
   });
 });
