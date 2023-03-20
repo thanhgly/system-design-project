@@ -43,9 +43,6 @@ describe('reviews\' read queries', () => {
       let end = performance.now();
       expect(Math.floor(end - start)).toBeLessThan(50);
       done();
-    })
-    .catch(err => {
-      console.log(err.stack);
     });
   });
 });
@@ -59,9 +56,6 @@ describe('metadata\'s read queries', () => {
       let end = performance.now();
       expect(Math.floor(end - start)).toBeLessThan(50);
       done();
-    })
-    .catch(err => {
-      console.log(err.stack);
     });
   });
 });
