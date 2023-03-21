@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --watch --coverage --detectOpenHandles",
+    "test-queries": "jest './__tests__/dbms.test.js' --watch",
     "start": "npx nodemon app.js"
   },
   "repository": {
