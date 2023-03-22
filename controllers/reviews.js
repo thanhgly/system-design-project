@@ -47,7 +47,6 @@ module.exports = {
 
   report: (req, res) => {
     let review_id = req.params.review_id;
-    console.log(review_id);
     if (isNaN(review_id)) {
       res.status(422).send('Error: invalid review id provided');
       return;
