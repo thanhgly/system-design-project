@@ -1,11 +1,6 @@
 import http from 'k6/http';
 import { sleep } from 'k6';
-
-const generateRandomId = (table = 'products') => {
-  let max = (table === 'products') ? 1000011 : 5774952;
-  let min = Math.floor(max * 0.1);
-  return Math.floor(Math.random() * (max - min) + min);
-};
+import generateRandomId from './randomIdGenerator.js';
 
 let product_id = generateRandomId();
 
@@ -22,12 +17,11 @@ export const options = {
       timeUnit: '1s',
       duration: '60s',
       preAllocatedVUs: 100,
-      maxVUs: 500,
+      maxVUs: 100000,
     },
   },
 };
 
 export default function () {
   http.get(`http://localhost:8000/reviews/?product_id=${product_id}`);
-  sleep(1);
 }

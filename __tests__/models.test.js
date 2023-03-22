@@ -88,7 +88,7 @@ describe('reviews\' add', () => {
       ]);
     })
     .then(() => {
-      return db.query(`DELETE FROM reviews WHERE id = (SELECT MAX(id) FROM reviews)`);
+      return db.query(`DELETE FROM reviews WHERE reviewer_name = 'reviewer'`);
     })
     .then(() => {
       done();
