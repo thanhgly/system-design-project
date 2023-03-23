@@ -43,7 +43,7 @@ describe('reviews\' read queries', () => {
     });
     let time = end - start;
     expect(time).toBeLessThan(50);
-    console.log('Query time: ', time);
+    console.log('reviews response time: ', time);
   });
 });
 
@@ -55,7 +55,7 @@ describe('metadata\'s read queries', () => {
       return performance.now();
     });
     let time = end - start;
+    console.log('metadata response time: ', time);
     expect(time).toBeLessThan(50);
-    console.log('Query time: ', time);
   });
 });
