@@ -14,9 +14,9 @@ services:
       - postgres:/var/lib/postgresql/data
   reviews-api:
     container_name: reviews-api
-    image: reviews-api:1.1
+    build: ./app/
     restart: always
     ports:
-      - '8000:80'
+      - '8000:8000'
 volumes:
   postgres:
