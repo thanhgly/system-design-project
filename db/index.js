@@ -19,8 +19,8 @@ const testConfig = {
   keepAlive: false
 };
 
-// const client = new Client(dbConfig);
-const client = new Client(testConfig);
+const client = new Client(dbConfig);
+// const client = new Client(testConfig);
 
 client.connect((err) => {
   if (err) {

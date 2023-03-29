@@ -22,7 +22,7 @@ module.exports = {
       ${utils.getSortQuery(sort)}
       LIMIT ${count}
       OFFSET ${(page - 1) * count}
-    `
+    `;
 
     return new Promise((resolve, reject) => {
 
