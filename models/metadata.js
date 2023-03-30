@@ -34,7 +34,7 @@ module.exports = {
       FROM reviews r
       WHERE r.product_id = ${product_id}
       GROUP BY r.product_id
-    `
+    `;
     return new Promise((resolve, reject) => {
       db.query(queryString)
       .then(res => {
