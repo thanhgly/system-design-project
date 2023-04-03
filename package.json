@@ -21,7 +21,8 @@
   "devDependencies": {
     "eslint": "^8.35.0",
     "jest": "^29.4.3",
-    "supertest": "^6.3.3"
+    "supertest": "^6.3.3",
+    "newrelic": "latest"
   },
   "dependencies": {
     "dotenv": "^16.0.3",
