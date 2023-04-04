@@ -1,4 +1,5 @@
 const { reviews } = require('../models');
+const cache = require('../cache');
 
 module.exports = {
   get: (req, res) => {
@@ -6,6 +7,7 @@ module.exports = {
 
     reviews.get(product_id, sort, page, count)
     .then(reviews => {
+      cache.set(req.url, JSON.stringify(reviews));
       res.json(reviews);
     })
     .catch(err => {

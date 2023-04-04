@@ -10,17 +10,7 @@ const dbConfig = {
   keepAlive: false
 };
 
-const testConfig = {
-  user: config.db.user,
-  host: config.db.host,
-  database: config.db.test_db,
-  password: config.db.password,
-  port: config.db.port,
-  keepAlive: false
-};
-
 const client = new Client(dbConfig);
-// const client = new Client(testConfig);
 
 client.connect((err) => {
   if (err) {
