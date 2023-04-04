@@ -11,7 +11,7 @@ services:
     networks:
       - reviews
     environment:
-      - NEW_RELIC_LICENSE_KEY="329eff3594f3a80e9384b8cfb3c41d94FFFFNRAL"
+      - NEW_RELIC_LICENSE_KEY=${NEW_RELIC_LICENSE}
       - NEW_RELIC_APP_NAME="Reviews API"
 networks:
   reviews:
