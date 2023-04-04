@@ -12,5 +12,8 @@ module.exports = {
   cache: {
     host: process.env.REDIS_HOST,
     port: process.env.REDIS_PORT
+  },
+  loader: {
+    key: process.env.LOADER_IO_KEY
   }
 };

@@ -2,10 +2,10 @@ const { createClient } = require('redis');
 const config = require('../config');
 
 const client = createClient({
-  // socket: {
-  //   host: config.cache.host,
-  //   port: config.cache.port
-  // }
+  socket: {
+    host: config.cache.host,
+    port: config.cache.port
+  }
 });
 
 (async () => {

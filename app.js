@@ -3,7 +3,7 @@ const express = require('express');
 const config = require('./config');
 const logger = require('./middlewares/logger');
 const cache = require('./cache');
-const { reviews, hello, loader }= require('./routes');
+const { reviews, hello }= require('./routes');
 
 const app = express();
 
@@ -13,7 +13,11 @@ app.use(logger);
 
 app.use('/hello', hello);
 app.use('/reviews', reviews);
-app.use('/loaderio-49be96a3ce5ab9e100b0adcc3aabb7e5', loader);
+
+// loader.io verification
+app.get('/' + config.loader.key, (req, res) => {
+  res.send(config.loader.key);
+});
 
 const server = app.listen(config.port, () => {
   console.log(`Listening on port ${config.port}`);

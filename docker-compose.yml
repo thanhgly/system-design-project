@@ -1,0 +1,17 @@
+version: '3'
+services:
+  redis-server:
+    image: redis
+    networks:
+      - reviews
+  api:
+    image: thanhly14/reviews_api:1.5
+    ports:
+      - '80:8000'
+    networks:
+      - reviews
+    environment:
+      - NEW_RELIC_LICENSE_KEY="329eff3594f3a80e9384b8cfb3c41d94FFFFNRAL"
+      - NEW_RELIC_APP_NAME="Reviews API"
+networks:
+  reviews:
