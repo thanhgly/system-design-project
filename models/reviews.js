@@ -61,7 +61,6 @@ module.exports = {
         INSERT INTO characteristic_reviews (characteristic_id, review_id, value)
         VALUES ${utils.generateQueryString('characteristics', characteristics)}
       )
-      SELECT * FROM inserted_id
     `;
     let values = [product_id, rating, summary, body, recommend, name, email];
 

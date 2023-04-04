@@ -1,22 +1,17 @@
 version: '3'
 services:
-  db:
-    container_name: postgres
-    image: postgres:15.2
-    restart: always
+  redis-server:
+    image: redis
+    networks:
+      - reviews
+  api:
+    image: thanhly14/reviews_api:1.5
+    ports:
+      - '80:8000'
+    networks:
+      - reviews
     environment:
-      POSTGRES_DB: ${DB_NAME}
-      POSTGRES_USER: ${DB_USER}
-      POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - '5432:5432'
-    volumes:
-      - postgres:/var/lib/postgresql/data
-  reviews-api:
-    container_name: reviews-api
-    build: ./app/
-    restart: always
-    ports:
-      - '8000:8000'
-volumes:
-  postgres:
+      - NEW_RELIC_LICENSE_KEY="329eff3594f3a80e9384b8cfb3c41d94FFFFNRAL"
+      - NEW_RELIC_APP_NAME="Reviews API"
+networks:
+  reviews:
